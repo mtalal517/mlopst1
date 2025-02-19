@@ -12,13 +12,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: requirements
-        run: npm install -r requirements.txt
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
 
       - name: Install Vercel CLI
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        run: vercel --prod --yes --token=${{ secrets.VercelToken }}
-
-      
+        run: |
+          vercel --prod --yes --token=${{ secrets.VercelToken }}
